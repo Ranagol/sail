@@ -1,10 +1,13 @@
 services:
     laravel.test:
         build:
+            # This is the location for the Dockerfile
             context: ./vendor/laravel/sail/runtimes/8.3
+            # This is the name of the Dockerfile. Dockerfile.
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
+        # the image that will be created will be named 'sail-8.3/app'
         image: sail-8.3/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
@@ -17,8 +20,12 @@ services:
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
+        # this mounts volumes for the container
         volumes:
+            # This is a bind mount. It does auto updating of our code, into the container.
+            # //TODO ANDOR Why do not have anonymus mount for remembering stuff in /vendor and /node_modules?
             - '.:/var/www/html'
+        # connects the container to the sail network, which is defined at the bottom of this file
         networks:
             - sail
         depends_on:
@@ -39,8 +46,11 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
+            # Mounts to the Docker named volume 'sail-mysql'. To remeber db data.
             - 'sail-mysql:/var/lib/mysql'
+            # Bind mount. Mounts a file into the container, which will be executed on container start.
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        # connects the container to the sail network, which is defined at the bottom of this file
         networks:
             - sail
         healthcheck:
@@ -100,10 +110,13 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+# This is the network that connects all container. Named 'sail'. Driver type is 'bridge'.
 networks:
     sail:
         driver: bridge
 volumes:
+    # This is used to save db data outside of the container. Named 'sail-mysql'. The mysql container
+    # mounts this volume to  his (inside the container)'/var/lib/mysql'.
     sail-mysql:
         driver: local
     sail-redis:
