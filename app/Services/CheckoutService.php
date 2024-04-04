@@ -53,13 +53,24 @@ class CheckoutService
      */
     public function getTotal(): float
     {
+        /**
+         * This is tricky. Very.
+         * 
+         * Imagine that you need to scan these products in this order:
+         * FR1, SR1, FR1, FR1, CF1.
+         * These are not 5 products, these are only 3 products.
+         * FR1 - 3 pieces
+         * SR1 - 1 piece
+         * CF1 - 1 piece
+         * This conversion from 5 to 3 is done here.
+         */
         $cartProducts = Cart::query()
             ->join('products', 'products.id', '=', 'carts.product_id')
             ->selectRaw('products.product_code, products.price, sum(carts.qty) as quantity')
             ->groupByRaw('products.product_code, products.price')
             ->get();
         
-        // dd($cartProducts);
+        dd($cartProducts->toArray());
 
         $total = 0;
 
