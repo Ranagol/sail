@@ -2,11 +2,14 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use App\Services\CheckoutService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CheckoutTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testCheckout1(): void
     {
 

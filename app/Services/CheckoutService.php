@@ -28,10 +28,10 @@ class CheckoutService
         $this->pricingRules = $pricingRules;
     }
 
-    public function scan(string $item): void
+    public function scan(string $productCode): void
     {
         //Find the product in the db
-        $product = Product::where('product_code', $item)->first();
+        $product = Product::where('product_code', $productCode)->first();
 
         if($product){
             Cart::create([
