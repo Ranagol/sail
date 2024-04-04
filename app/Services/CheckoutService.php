@@ -130,7 +130,16 @@ class CheckoutService
      */
     private function bulkDiscount($product, $quantity, $newPrice)
     {
-        return $total = $product->price * $product->quantity;
+        //This is the original price of the product
+        $price = $product->price;
+
+        //If we have 3 or more strawberries, then the price is 4.50 instead of 5.00
+        if($product->quantity >= $quantity){
+
+            //This is the new price, with the bulk discount
+            $price = $newPrice;
+        }
+        return $total = $price * $product->quantity;
     }
 
 
