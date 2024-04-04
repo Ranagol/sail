@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Product;
+
 /**
  * Source here: https://www.youtube.com/watch?v=5XywKLjCD3g
  * Watched and followed the tut till 16:26 of 36:03.
