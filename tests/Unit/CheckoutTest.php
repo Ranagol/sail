@@ -4,11 +4,20 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Services\CheckoutService;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CheckoutTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        //Here we do full seeding of the database
+        Artisan::call('db:seed');
+
+    }
 
     public function testCheckout1(): void
     {

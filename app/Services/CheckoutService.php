@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Cart;
 use App\Models\Product;
 
 /**
@@ -36,14 +37,31 @@ class CheckoutService
         if($product){
             Cart::create([
                 'product_id' => $product->id,
+                'product_code' => $product->product_code,
                 'price' => $product->price
             ]);
+
+            dump(Cart::all()->toArray());
 
         }
     }
 
     public function getTotal(): float
     {
-        return $this->total;
+        $cartProducts = Cart::query()
+            ->join('products', 'products.id', '=', 'carts.product_id')
+            ->selectRaw('products.product_code, products.price, sum(carts.qty) as quantity')
+            ->groupByRaw('products.product_code, products.price')
+            ->get();
+        
+        // dd($cartProducts);
+
+        $total = 0;
+
+        foreach($cartProducts as $cartProduct){
+            $total += $cartProduct->price * $cartProduct->quantity;
+        }
+
+        return $total; 
     }
 }
