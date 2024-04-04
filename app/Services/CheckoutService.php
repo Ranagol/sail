@@ -70,7 +70,7 @@ class CheckoutService
             ->groupByRaw('products.product_code, products.price')
             ->get();
         
-        dd($cartProducts->toArray());
+        // dd($cartProducts->toArray());
 
         $total = 0;
 
