@@ -31,7 +31,6 @@ class CheckoutTest extends TestCase
         parent::setUp();
         //Here we do full seeding of the database
         Artisan::call('db:seed');
-
     }
 
     public function testCheckout1(): void
